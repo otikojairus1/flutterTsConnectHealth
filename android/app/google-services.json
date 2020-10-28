@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "869417155102",
+    "firebase_url": "https://tsconnect-b48cf.firebaseio.com",
+    "project_id": "tsconnect-b48cf",
+    "storage_bucket": "tsconnect-b48cf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:869417155102:android:4c1ac8754d42c773b34c0f",
+        "android_client_info": {
+          "package_name": "com.example.whats_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "869417155102-gp72stfjrs4vdarh9uthl1vcckl7r0ce.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCk47H95DK87uNE7Va-F3cDTH4FeXnTKNc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "869417155102-gp72stfjrs4vdarh9uthl1vcckl7r0ce.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
