@@ -1,36 +1,32 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 import 'package:whats_app/screens/CreateAccount.dart';
 import 'package:whats_app/screens/widgets/alert.dart';
 import 'package:whats_app/screens/widgets/bezierContainer.dart';
 
+import 'Loading.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(Loading());
+  runApp(LoginPage());
 }
 
-class Loading extends StatefulWidget {
-  Loading({Key key, this.title}) : super(key: key);
+class LoginPage extends StatefulWidget {
+  LoginPage({Key key, this.title}) : super(key: key);
 
   final String title;
 
   @override
-  _LoadingState createState() => _LoadingState();
+  _LoginPageState createState() => _LoginPageState();
 }
 
-class _LoadingState extends State<Loading> {
+class _LoginPageState extends State<LoginPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  TextEditingController _smsCodeController = TextEditingController();
-  TextEditingController _phoneNumberController = TextEditingController();
-
-
-
   Widget _backButton() {
     return InkWell(
       onTap: () {
@@ -75,20 +71,13 @@ class _LoadingState extends State<Loading> {
           SizedBox(
             height: 10,
           ),
-          SizedBox(
-            height: 10,
-          ),
           TextField(
-            controller: controllerFunction(),
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-                border: InputBorder.none,
-                fillColor: Color(0xfff3f3f4),
-                filled: true),
-            inputFormatters: <TextInputFormatter>[
-              FilteringTextInputFormatter.digitsOnly
-            ],
-          )
+              obscureText: isPassword,
+              controller: controllerFunction(),
+              decoration: InputDecoration(
+                  border: InputBorder.none,
+                  fillColor: Color(0xfff3f3f4),
+                  filled: true))
         ],
       ),
     );
@@ -114,14 +103,30 @@ class _LoadingState extends State<Loading> {
                 end: Alignment.centerRight,
                 colors: [Color(0xfffbb448), Color(0xfff7892b)])),
         child: Text(
-          'Verify',
+          'Login',
           style: TextStyle(fontSize: 20, color: Colors.white),
         ),
       ),
       onTap: () async {
+        try {
+          UserCredential userCredential = await FirebaseAuth.instance
+              .signInWithEmailAndPassword(
+                  email: emailController.text,
+                  password: passwordController.text);
 
-
-
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => Loading()),
+          );
+        } on FirebaseAuthException catch (e) {
+          if (e.code == 'user-not-found') {
+            showAlertDialog(context);
+            //print('No user found for that email.');
+          } else if (e.code == 'wrong-password') {
+            showAlertDialog(context);
+          }
+        }
+        // print('tt');
       },
     );
   }
@@ -244,7 +249,7 @@ class _LoadingState extends State<Loading> {
     return RichText(
       textAlign: TextAlign.center,
       text: TextSpan(
-          text: 'Ver',
+          text: 'Ts',
           style: GoogleFonts.portLligatSans(
             textStyle: Theme.of(context).textTheme.display1,
             fontSize: 30,
@@ -253,11 +258,11 @@ class _LoadingState extends State<Loading> {
           ),
           children: [
             TextSpan(
-              text: 'ify you',
+              text: 'con',
               style: TextStyle(color: Colors.black, fontSize: 30),
             ),
             TextSpan(
-              text: 'r Phone',
+              text: 'nect',
               style: TextStyle(color: Color(0xffe46b10), fontSize: 30),
             ),
           ]),
@@ -267,7 +272,8 @@ class _LoadingState extends State<Loading> {
   Widget _emailPasswordWidget() {
     return Column(
       children: <Widget>[
-        _entryField("We need to confirm if its really you!"),
+        _entryField("Email"),
+        _entryField("Password", isPassword: true),
       ],
     );
   }
@@ -300,10 +306,14 @@ class _LoadingState extends State<Loading> {
                   Container(
                     padding: EdgeInsets.symmetric(vertical: 10),
                     alignment: Alignment.centerRight,
-                    child: Text('didnt get OTP ?',
+                    child: Text('Forgot Password ?',
                         style: TextStyle(
                             fontSize: 14, fontWeight: FontWeight.w500)),
                   ),
+                  _divider(),
+                  _facebookButton(),
+                  SizedBox(height: height * .055),
+                  _createAccountLabel(),
                 ],
               ),
             ),

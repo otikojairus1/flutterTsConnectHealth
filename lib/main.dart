@@ -5,6 +5,7 @@ import 'package:whats_app/screens/Signin.dart';
 
 import 'package:whats_app/screens/Signup.dart';
 import 'package:whats_app/screens/SomethingWentWrong.dart';
+import 'package:whats_app/screens/profile.dart';
 
 void main() {
   runApp(MyApp());
@@ -84,6 +85,6 @@ class _AppState extends State<App> {
       return Loading();
     }
 
-    return Signup();
+    return WelcomePage();
   }
 }

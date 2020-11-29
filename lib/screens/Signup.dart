@@ -2,8 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:whats_app/screens/Signin.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:whats_app/screens/profile.dart';
 
 import 'package:whats_app/screens/services/fbApi.dart';
+import 'package:whats_app/screens/widgets/alert.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -111,16 +113,41 @@ class _State extends State<Signup> {
                       onPressed: () async {
                         // setState(() => _isLoading = true);
 
-                        UserCredential user = await FirebaseAuth.instance
-                            .createUserWithEmailAndPassword(
-                                email: emailController.text,
-                                password: passwordController.text);
+                        try {
+                          UserCredential userCredential = await FirebaseAuth
+                              .instance
+                              .signInWithEmailAndPassword(
+                                  email: emailController.text,
+                                  password: passwordController.text);
 
-                        if (user != null) {
-                          print("SUCCESS");
-                        } else {
-                          print("issue");
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => WelcomePage()),
+                          );
+                        } on FirebaseAuthException catch (e) {
+                          if (e.code == 'user-not-found') {
+                            showAlertDialog(context);
+                            //print('No user found for that email.');
+                          } else if (e.code == 'wrong-password') {
+                            showAlertDialog(context);
+                          }
                         }
+
+                        // UserCredential user = await FirebaseAuth.instance
+                        //     .signInWithEmailAndPassword(
+                        //         email: emailController.text,
+                        //         password: passwordController.text);
+
+                        // if (user != null) {
+                        //   Navigator.push(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //         builder: (context) => ProfileApp()),
+                        //   );
+                        // } else {
+                        //   print("issue");
+                        // }
                         // bool b = await _loginUser(
                         //     emailController.text, passwordController.text);
                         // //setState(() => _isLoading = false);

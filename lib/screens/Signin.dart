@@ -19,7 +19,7 @@ class _State extends State<Signin> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('TSCONNECT'),
+          title: Text('TSCONECT'),
         ),
         body: Padding(
             padding: EdgeInsets.all(10),
