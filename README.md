@@ -1,6 +1,6 @@
-# whats_app
+# TSCONNECTHEALTH DEMO
 
-A Whatsapp clone based on Flutter
+A Health app based on Flutter
 
 ## Getting Started
 
